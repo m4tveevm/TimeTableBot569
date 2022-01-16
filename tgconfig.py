@@ -194,6 +194,7 @@ spb_nevs_school569__timetable_Saturday_10a_t = {
     'lesson6': 'Физкультура',
 }
 
+
 def senttimetable(day):
     ttdata = checkdata()
     if day == 'tomorrow':
@@ -204,7 +205,6 @@ def senttimetable(day):
     ttmessage = ''
     if ttdata == 1:
         ttmessage += ('1. ' + spb_nevs_school569__timetable_Monday_10a_t.get('lesson1') + '\n')
-        ttmessage += ('2. ' + spb_nevs_school569__timetable_Monday_10a_t.get('lesson2') + '\n')
         ttmessage += ('2. ' + spb_nevs_school569__timetable_Monday_10a_t.get('lesson2') + '\n')
         ttmessage += ('3. ' + spb_nevs_school569__timetable_Monday_10a_t.get('lesson3') + '\n')
         ttmessage += ('4. ' + spb_nevs_school569__timetable_Monday_10a_t.get('lesson4') + '\n')
