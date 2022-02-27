@@ -1,7 +1,14 @@
-TOKEN = '1943935144:AAEKmlrqFpsjp2dUeW87paSC_zVJA-vO1bw'
-# Костыль, который вскоре будет поключен к бд
-
 import datetime
+
+import bs4
+import requests
+
+TOKEN = ''
+
+
+def getbotip():
+    return (bs4.BeautifulSoup(requests.get('https://2ip.ua/ru/').text, "html.parser").select(
+        " .ipblockgradient .ip")[0].getText()).split()[0]
 
 
 def checkdata():
@@ -11,7 +18,7 @@ def checkdata():
 # spb_nevs_school569
 spb_nevs_school569__students = []
 spb_nevs_school569__admins = [505848766]
-spb_nevs_school569__Saturdaysub = []
+# spb_nevs_school569__Saturdaysub = []
 
 # -----------------Timetable Timings
 spb_nevs_school569__timetable_timings_1to4 = {
@@ -119,6 +126,7 @@ spb_nevs_school569__timetable_Wednesday_10a_s = {
     'lesson4': 'Естествознание',
     'lesson5': 'Естествознание',
     'lesson6': 'Физкультура',
+    'lesson7': 'Русский*',
 }
 spb_nevs_school569__timetable_Wednesday_10a_t = {
     'classname': 'Технический профиль',
@@ -128,6 +136,7 @@ spb_nevs_school569__timetable_Wednesday_10a_t = {
     'lesson4': 'Информатика',
     'lesson5': 'Информатика',
     'lesson6': 'Физкультура',
+    'lesson7': 'Русский*',
 }
 
 # Thursday
@@ -216,8 +225,7 @@ def senttimetable(day):
         ttmessage += ('3. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson3') + '\n')
         ttmessage += ('4. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson4') + '\n')
         ttmessage += ('5. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson5') + '\n')
-        ttmessage += ('6. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson6') + '\n')
-        ttmessage += ('7. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson7'))
+        ttmessage += ('6. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson6'))
     elif ttdata == 3:
         ttmessage += ('1. ' + spb_nevs_school569__timetable_Wednesday_10a_t.get('lesson1') + '\n')
         ttmessage += ('2. ' + spb_nevs_school569__timetable_Wednesday_10a_t.get('lesson2') + '\n')
