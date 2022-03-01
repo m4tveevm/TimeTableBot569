@@ -21,3 +21,7 @@ Our project uses the pyTelegramBotAPI library, which allows us to conveniently s
 ## v 1.01
 
 > Updated the code, fixed errors with days of the week. Added new features for the bot tester.
+
+## v 1.01.1
+
+> Updated code, hot-fix bugs. The text schedule has been changed.

@@ -3,7 +3,7 @@ import datetime
 import bs4
 import requests
 
-TOKEN = ''
+TOKEN = '1943935144:AAFpxPopvveZRxtrJze7nLr_Jr_NHoTvQsE'
 
 
 def getbotip():
@@ -103,8 +103,9 @@ spb_nevs_school569__timetable_Tuesday_10a_s = {
     'lesson2': 'Английский язык',
     'lesson3': 'Обществознание',
     'lesson4': 'Обществознание',
-    'lesson5': 'ОБЖ',
-    'lesson6': 'Физкультура',
+    'lesson5': 'Русский',
+    'lesson6': 'ОБЖ',
+    'lesson7': 'Физкультура'
 }
 
 spb_nevs_school569__timetable_Tuesday_10a_t = {
@@ -113,8 +114,9 @@ spb_nevs_school569__timetable_Tuesday_10a_t = {
     'lesson2': 'Английский язык',
     'lesson3': 'Физика',
     'lesson4': 'Физика',
-    'lesson5': 'ОБЖ',
-    'lesson6': 'Физкультура',
+    'lesson5': 'Русский',
+    'lesson6': 'ОБЖ',
+    'lesson7': 'Физкультура'
 }
 
 # Wednesday
@@ -225,7 +227,8 @@ def senttimetable(day):
         ttmessage += ('3. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson3') + '\n')
         ttmessage += ('4. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson4') + '\n')
         ttmessage += ('5. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson5') + '\n')
-        ttmessage += ('6. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson6'))
+        ttmessage += ('6. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson6') + '\n')
+        ttmessage += ('7. ' + spb_nevs_school569__timetable_Tuesday_10a_t.get('lesson7'))
     elif ttdata == 3:
         ttmessage += ('1. ' + spb_nevs_school569__timetable_Wednesday_10a_t.get('lesson1') + '\n')
         ttmessage += ('2. ' + spb_nevs_school569__timetable_Wednesday_10a_t.get('lesson2') + '\n')

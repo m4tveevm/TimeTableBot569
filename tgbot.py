@@ -1,5 +1,7 @@
 ﻿# Please, work! / Работай, пожалуйста!
 
+import telebot
+
 from markups import *
 from questions import *
 from tgconfig import *
