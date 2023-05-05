@@ -11,13 +11,17 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-
-
 async def admin(update, context):
-    admin_commands = [['/add_users', '/reload'],
+    admin_commands = [['/add_users', ''],
                       ['', '']]
     admin_keyboard = ReplyKeyboardMarkup(admin_commands, one_time_keyboard=True)
-    await update.message.reply_text('Выполнено, выдал вам клавиатуру администратора', reply_markup=admin_keyboard)
+    await update.message.reply_text('Выполнено, выдал вам клавиатуру администратора'
+                                    '', reply_markup=admin_keyboard)
+
+
+async def important_numbers(update, context):
+    await update.message.reply_text('Выполнено, выдал вам клавиатуру администратора'
+                                    '', reply_markup=default_keyboard)
 
 
 async def add_users(update, context):
@@ -26,7 +30,7 @@ async def add_users(update, context):
     for user_id in users:
         user_class, user_school = (await connect_db(f'''SELECT class.name, schools.name FROM users left join class 
         on users.class = class.id left join schools on class.school_id = schools.id where tg_id = {user_id[0]}'''))[0]
-        if user_class == None or user_school == None:
+        if user_class is None or user_school is None:
             continue
         await context.bot.send_message(chat_id=user_id[0], text=f"""
 Верификация пройдена! Образовательная площадка:
@@ -105,6 +109,69 @@ async def tomorrow(update, context):
                                     reply_markup=default_keyboard)
 
 
+async def dep_to(update, context):
+    message = context.args
+    if len(message) >= 2:
+        print(message)
+        if ':' not in update.message.text:
+            await update.message.reply_text('''Ошибка, такого запроса я не знаю.
+Проверьте, написание сообщения для обучающихся по шаблону /dep_to {класс/классы}: {сообщение}
+
+Пример: /dep_to 11А: Завтра будет олимпиада!
+
+Для оповещения сразу всех учеников исопльзуйте команду /dep_to all: {сообщение}
+Пример: /dep_to all: Наша школа самая сильная!
+В вашем запросе не нашлся символ ":"''')
+            return None
+        else:
+            class_alt_name = update.message.text.replace('/dep_to ', '', 1).replace(' ', '').split(':')[0].split(',')
+            class_alt_name[-1] = class_alt_name[-1].replace(':', '', 1)
+            user_school = (await connect_db(f'''SELECT schools.id FROM users 
+left join class on users.class = class.id 
+left join schools on class.school_id = schools.id
+where users.tg_id = {update.effective_user.id}'''))[0][0]
+            if len(class_alt_name) == 1:
+                class_alt_name = list(class_alt_name)
+            if class_alt_name[0].lower() == 'all':
+                class_alt_name = list(await connect_db(f'''SELECT class.local_alt_name FROM users 
+left join class on users.class = class.id 
+left join schools on class.school_id = schools.id
+where schools.id = {user_school}'''))
+            class_alt_name = set(class_alt_name)
+            print(class_alt_name)
+            for class_id in class_alt_name:
+                if class_id:
+                    if len(class_id[0]) > 1:
+                        class_id = class_id[0]
+                    print(class_id)
+                    is_error = False
+                    if not (await connect_db(f'''SELECT tg_id FROM users 
+    left join class on users.class = class.id 
+    left join schools on class.school_id = schools.id
+    where schools.id = {user_school} and class.local_alt_name = '{class_id}'
+                    ''')):
+                        if not is_error:
+                            is_error = True
+                            await update.message.reply_text(
+                                f'Не удалось отправить оповещение, так как "{class_id}" класс отсутсвует в системе')
+                    for user_id in (await connect_db(f'''SELECT tg_id FROM users 
+    left join class on users.class = class.id 
+    left join schools on class.school_id = schools.id
+    where schools.id = {user_school} and class.local_alt_name = '{class_id}'
+                    ''')):
+                        user_id = user_id[0]
+                        message = update.message.text.replace('/dep_to', 'to', 1)
+                        await context.bot.send_message(chat_id=user_id, text=f"Сообщение от {user_id}:\n{message}")
+    else:
+        await update.message.reply_text('''Ошибка, такого запроса я не знаю.
+Проверьте, написание сообщения для обучающихся по шаблону /dep_to {класс/классы}: {сообщение}
+
+Пример: /dep_to 11А: Завтра будет олимпиада!
+
+Для оповещения сразу всех учеников исопльзуйте команду /dep_to all: {сообщение}
+Пример: /dep_to all: Наша школа самая сильная!''')
+
+
 async def text(update, context):
     user = update.effective_user
     if await is_user(user) != 'done':
@@ -142,7 +209,6 @@ async def text(update, context):
 
 
 def main():
-    global application
     application = Application.builder().token(BOT_TOKEN).build()
     text_handler = MessageHandler(filters.TEXT, text)
     application.add_handler(CommandHandler("start", start))
@@ -151,6 +217,7 @@ def main():
     application.add_handler(CommandHandler("token", token_connection))
     application.add_handler(CommandHandler("today", today))
     application.add_handler(CommandHandler("tomorrow", tomorrow))
+    application.add_handler(CommandHandler("dep_to", dep_to))
     application.add_handler(text_handler)
     application.run_polling()
 

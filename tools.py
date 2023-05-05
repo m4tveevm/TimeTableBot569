@@ -3,6 +3,7 @@ import config
 import datetime
 from telegram import ReplyKeyboardMarkup
 
+
 async def connect_db(request, sql_file=config.DEFAULT_SQL):
     # Функция, которая упрощает соединение с DB.
     # А, как следствие, уменьшает количество требуемых строчек кода, для реализации

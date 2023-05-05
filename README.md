@@ -1,6 +1,6 @@
 # Timetable569
 
-Timetablebot569 is a project that will allow many students to conveniently and easily view the schedule of school
+TimeTable569 is a project that will allow many students to conveniently and easily view the schedule of school
 classes.
 
 ***
@@ -9,7 +9,7 @@ classes.
 
 Our project uses the pyTelegramBotAPI library, which allows us to conveniently send requests.
 <br><br>
-<pre><code>pip install pyTelegramBotAPI</code></pre>
+<pre><code>python-telegram-bot[ext] >= 20.2</code></pre>
 ***
 
 # Updates:
@@ -17,7 +17,7 @@ Our project uses the pyTelegramBotAPI library, which allows us to conveniently s
 ## v 1.0
 
 > The first download of the project files has been made.
- 
+
 ## v 1.01
 
 > Updated the code, fixed errors with days of the week. Added new features for the bot tester.
@@ -32,3 +32,11 @@ Our project uses the pyTelegramBotAPI library, which allows us to conveniently s
 > Updated the Database to ensure secure storage of client data.
 > Added token system that enables students to directly input token for authorization from their class teacher.
 > Configured class-wise schedule display from the database.
+
+## v 1.2
+
+> Notification System for Edu administration: An innovative notification system has been introduced that allows users to
+> receive alerts based on specific classes. Users can now use the command '/dep to {class or more}: {message}' to set up
+> notifications for specific classes. Whenever a distinctive message is posted in the selected class, the notification
+> system sends a message to the user, providing real-time updates on the latest updates which can help users stay
+> informed and aware of any critical activities or updates in the selected class.
