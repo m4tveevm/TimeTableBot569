@@ -25,3 +25,10 @@ Our project uses the pyTelegramBotAPI library, which allows us to conveniently s
 ## v 1.01.1
 
 > Updated code, hot-fix bugs. The text schedule has been changed.
+
+## v 1.2 beta 1
+
+> Updated code, hot-fix bugs. The text schedule has been changed.
+> Updated the Database to ensure secure storage of client data.
+> Added token system that enables students to directly input token for authorization from their class teacher.
+> Configured class-wise schedule display from the database.
