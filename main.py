@@ -1,5 +1,4 @@
-import asyncio
-import logging, sys
+import logging
 from tools import *
 from telegram import ReplyKeyboardMarkup
 from telegram.ext import Application, MessageHandler, filters, CommandHandler
@@ -31,9 +30,13 @@ async def add_users(update, context):
 Верификация пройдена! Образовательная площадка:
 "{user_school}" приняла тебя в своей системе. 
 Теперь у тебя есть доступ функционалу твоего класса: "{user_class}"!""")
-
-    await update.message.reply_text('Выполнено, оповестил всех новых учеников.')
-
+        await connect_db(f'''UPDATE users
+        SET update_form = 0
+        WHERE tg_id = {user_id[0]} ''')
+    if len(users) > 0:
+        await update.message.reply_text(f'Выполнено, оповестил всех новых учеников. ({len(users)} человек)')
+    else:
+        await update.message.reply_text(f'Запрос был выполнен, но нашлось лишь {len(users)} человек')
 
 async def start(update, context):
     user = update.effective_user
