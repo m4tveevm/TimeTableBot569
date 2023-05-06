@@ -52,10 +52,10 @@ async def start(update, context):
             await update.message.reply_html(rf"""Привет {user.mention_html()}!
 Твоя заявка {user.id} находится на рассмотрении.""")
         elif await is_user(user) == 'done':
-            await update.message.reply_html(rf"""{user.mention_html()}, вы уже прошли верефикацию.""")
+            await update.message.reply_html(rf"""{user.mention_html()}, вы уже прошли верификацию.""")
     else:
         await update.message.reply_html(f"""Привет {user.mention_html()}!
-Для продолжения нашего взаимодействия, попроси куратора твоего образовательного учереждения добавть 
+Для продолжения нашего взаимодействия, попроси куратора твоего образовательного учреждения добавить 
 тебя в нашу платформу. Не забудь указать id своего обращения(id: {user.id}) либо свой telegram id""")
 
 
@@ -119,9 +119,9 @@ async def dep_to(update, context):
 
 Пример: /dep_to 11А: Завтра будет олимпиада!
 
-Для оповещения сразу всех учеников исопльзуйте команду /dep_to all: {сообщение}
+Для оповещения сразу всех учеников используйте команду /dep_to all: {сообщение}
 Пример: /dep_to all: Наша школа самая сильная!
-В вашем запросе не нашлся символ ":"''')
+В вашем запросе не нашёлся символ ":"''')
             return None
         else:
             class_alt_name = update.message.text.replace('/dep_to ', '', 1).replace(' ', '').split(':')[0].split(',')
@@ -153,7 +153,7 @@ where schools.id = {user_school}'''))
                         if not is_error:
                             is_error = True
                             await update.message.reply_text(
-                                f'Не удалось отправить оповещение, так как "{class_id}" класс отсутсвует в системе')
+                                f'Не удалось отправить оповещение, так как "{class_id}" класс отсутствует в системе')
                     for user_id in (await connect_db(f'''SELECT tg_id FROM users 
     left join class on users.class = class.id 
     left join schools on class.school_id = schools.id
@@ -168,7 +168,7 @@ where schools.id = {user_school}'''))
 
 Пример: /dep_to 11А: Завтра будет олимпиада!
 
-Для оповещения сразу всех учеников исопльзуйте команду /dep_to all: {сообщение}
+Для оповещения сразу всех учеников используйте команду /dep_to all: {сообщение}
 Пример: /dep_to all: Наша школа самая сильная!''')
 
 
