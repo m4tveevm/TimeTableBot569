@@ -9,7 +9,11 @@ classes.
 
 Our project uses the pyTelegramBotAPI library, which allows us to conveniently send requests.
 <br><br>
-<pre><code>python-telegram-bot[ext] >= 20.2</code></pre>
+<pre><code>python-telegram-bot[ext] >=20.2
+Flask>=2.3.2
+pandas>=2.0.1
+aiohttp>=3.8.4
+</code></pre>
 ***
 
 # Updates:
@@ -40,3 +44,8 @@ Our project uses the pyTelegramBotAPI library, which allows us to conveniently s
 > notifications for specific classes. Whenever a distinctive message is posted in the selected class, the notification
 > system sends a message to the user, providing real-time updates on the latest updates which can help users stay
 > informed and aware of any critical activities or updates in the selected class.
+
+## v 1.2.1
+
+> added a system that loads the exam calendar and a system to check the user for administrator rights before using the
+> function for administration.

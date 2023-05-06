@@ -12,6 +12,10 @@ logger = logging.getLogger(__name__)
 
 
 async def admin(update, context):
+    user = update.effective_user
+    if not await is_admin(user):
+        await update.message.reply_text(f'У вас нет доступа к этой команде.')
+        return None
     admin_commands = [['/add_users', ''],
                       ['', '']]
     admin_keyboard = ReplyKeyboardMarkup(admin_commands, one_time_keyboard=True)
@@ -19,13 +23,15 @@ async def admin(update, context):
                                     '', reply_markup=admin_keyboard)
 
 
-async def important_numbers(update, context):
-    await update.message.reply_text('Выполнено, выдал вам клавиатуру администратора'
-                                    '', reply_markup=default_keyboard)
-
-
 async def add_users(update, context):
     # Оповещает пользователей, которых добавили в bd в какой-то класс.
+    user = update.effective_user
+    if await is_user(user) != 'done':
+        await start(update, context)
+        return None
+    if not await is_admin(user):
+        await update.message.reply_text(f'У вас нет доступа к этой команде.')
+        return None
     users = await connect_db('''SELECT tg_id FROM users where update_form = 1''')
     for user_id in users:
         user_class, user_school = (await connect_db(f'''SELECT class.name, schools.name FROM users left join class 
@@ -99,18 +105,28 @@ async def token_connection(update, context):
 
 async def today(update, context):
     user = update.effective_user
+    if await is_user(user) != 'done':
+        await start(update, context)
     await update.message.reply_text(await make_time_table(await get_class_id(user), await to_day()),
                                     reply_markup=default_keyboard)
 
 
 async def tomorrow(update, context):
     user = update.effective_user
+    if await is_user(user) != 'done':
+        await start(update, context)
     await update.message.reply_text(await make_time_table(await get_class_id(user), await to_day() + 1),
                                     reply_markup=default_keyboard)
 
 
 async def dep_to(update, context):
     message = context.args
+    user = update.effective_user
+    if await is_user(user) != 'done':
+        await start(update, context)
+    if not await is_admin(user):
+        await update.message.reply_text(f'У вас нет доступа к этой команде.')
+        return None
     if len(message) >= 2:
         print(message)
         if ':' not in update.message.text:
@@ -172,6 +188,14 @@ where schools.id = {user_school}'''))
 Пример: /dep_to all: Наша школа самая сильная!''')
 
 
+async def days_to_ege(update, context):
+    user = update.effective_user
+    if await is_user(user) != 'done':
+        await start(update, context)
+    schedule = await get_schedule_from_server()
+    await update.message.reply_text(schedule, reply_markup=default_keyboard)
+
+
 async def text(update, context):
     user = update.effective_user
     if await is_user(user) != 'done':
@@ -218,6 +242,7 @@ def main():
     application.add_handler(CommandHandler("today", today))
     application.add_handler(CommandHandler("tomorrow", tomorrow))
     application.add_handler(CommandHandler("dep_to", dep_to))
+    application.add_handler(CommandHandler("days_to_ege", days_to_ege))
     application.add_handler(text_handler)
     application.run_polling()
 

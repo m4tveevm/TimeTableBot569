@@ -1,13 +1,13 @@
 import sqlite3
 import config
 import datetime
+import aiohttp
 from telegram import ReplyKeyboardMarkup
 
 
 async def connect_db(request, sql_file=config.DEFAULT_SQL):
     # Функция, которая упрощает соединение с DB.
-    # А, как следствие, уменьшает количество требуемых строчек кода, для реализации
-    # запроссов к db.
+    # А, как следствие, уменьшает количество требуемых строчек кода, для реализации запросов к db.
     try:
         con = sqlite3.connect(sql_file)
         cur = con.cursor()
@@ -64,6 +64,27 @@ async def make_time_table(user_class, day):
     else:
         data.append('К сожалению, расписания на данный день не найдено.')
     return '\n'.join(data)
+
+
+async def is_admin(user):
+    return await connect_db(f'''SELECT is_admin
+  FROM workers
+ WHERE tg_id = {user.id};''')
+
+
+async def get_schedule_from_server():
+    url = 'http://localhost:8082/schedule'
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                schedule = await response.json()
+                lessons = [schedule["Предметы"][elem] for elem in schedule["Предметы"]]
+                days = [schedule["Дата"][elem] for elem in schedule["Дата"]]
+                return 'Вот расписание сдачи ЕГЭ:\n' + '\n\n'.join([f'{days[i]} -'
+                                                                    f' {lessons[i]}' for i in range(len(lessons))])
+    except Exception as exeption:
+        print(exeption)
+        return 'К сожалению не удалось найти расписание сдачи ЕГЭ.'
 
 
 # default markup
